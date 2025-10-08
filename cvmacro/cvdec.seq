@@ -1,0 +1,34 @@
+!Purpose:	This macro puts decenter data into buffer 1
+!
+! Input: none (all surfaces are queried)	
+!
+! Output to buffer 1:
+!         rows: one row per surface, including object
+!         columns: xde yde zde ade bde cde xod yod zod (typ dec)
+!
+!Authors:	Joseph M. Howard - NASA Goddard		Date: 3-22-2006
+!
+
+lcl num ^i
+
+buf del b1
+
+for ^i 0 (num s)
+	buf put b1 i^i+1 j1 (xde s^i)
+	buf put b1 i^i+1 j2 (yde s^i)
+	buf put b1 i^i+1 j3 (zde s^i)
+	buf put b1 i^i+1 j4 (ade s^i)
+	buf put b1 i^i+1 j5 (bde s^i)
+	buf put b1 i^i+1 j6 (cde s^i)
+	buf put b1 i^i+1 j7 (xod s^i)
+	buf put b1 i^i+1 j8 (yod s^i)
+	buf put b1 i^i+1 j9 (zod s^i)
+    buf put b1 i^i+1 j10 (typ dec s^i)
+end for
+
+! Copyright © 2004-2005 United States Government as represented by the Administrator of the 
+! National Aeronautics and Space Administration.  No copyright is claimed in the United States 
+! under Title 17, U.S. Code. All Other Rights Reserved.
+! 
+! Authors: Joseph M. Howard, Blair L. Unger, Mark E. Wilson, NASA
+! Revision Date: 2007.08.22     

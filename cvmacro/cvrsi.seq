@@ -1,0 +1,47 @@
+!Purpose:	This macro gets ray data from buffer 0 when calling RSI
+!
+! Output:	The output data is stored in buffer 1. 
+!
+!Author:	Joseph M. Howard - NASA Goddard		Date: 6-1-2007
+!
+!*********************************************************************
+
+lcl num ^i ^start ^end !^s((num s))
+
+buf mov b0 i1 j1;
+buf fnd " X "
+^start==(buf.i)+1; 
+buf fnd "buf n";
+^end==(buf.i)-1;
+wri ^start ^end
+
+! Parse data
+! Assumed format: ROF ''E21.15'' X Y Z L M N AOI AOR LEN;
+buf prs i^start..^end "'4c' 'c' '21.15e' '21.15e''21.15e''21.15e''21.15e''21.15e''21.15e''21.15e''21.15e'"; 
+
+! Move to buffer 1, and covert STO OBJ IMG and surface data to numbers
+buf del b1; 
+buf mov b1;
+buf cop b0 i^start..^end
+buf fnd "OBJ";
+if (buf.fnd)
+    buf put 0.0
+end if
+buf fnd "STO"; 
+if (buf.fnd)
+    buf put (sto)
+end if
+buf fnd "IMG"; 
+if (buf.fnd)
+    buf put (num s)
+end if
+for ^i ^start ^end
+    buf put b1 i^i j2 str_to_num((buf.str b1 i^i j1));
+end for
+
+! Copyright © 2004-2005 United States Government as represented by the Administrator of the 
+! National Aeronautics and Space Administration.  No copyright is claimed in the United States 
+! under Title 17, U.S. Code. All Other Rights Reserved.
+! 
+! Authors: Joseph M. Howard, Blair L. Unger, Mark E. Wilson, NASA
+! Revision Date: 2007.08.22     

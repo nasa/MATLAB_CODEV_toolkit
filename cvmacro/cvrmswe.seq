@@ -1,0 +1,56 @@
+!Purpose:	This macro uses the RMSWE macro to get wavefront data
+!
+! Input	NRD
+!		W
+!		Z
+!		switch (NOM=1, BES=0)
+!
+!
+! Output	The output data is stored in buffer 1. 
+!
+!Author:	Blair L. Unger - NASA Goddard		Date: 5-31-2006
+!
+!*********************************************************************
+
+RFD 20 1 1 1
+
+lcl num ^grid ^w ^z ^temp ^data(100,100) ^f ^fnum ^switch ^i
+
+^grid == #1
+^w == #2
+^z == #3
+^switch == #4
+
+if (out)
+    out n; !turn off all outputs
+    ^outstat == 1
+else
+    ^outstat == 0
+end if
+
+^fnum == (num f)+1
+buf del b1
+
+if ^switch=1
+	^temp == rmswe(^w,^z,^grid,^data,'NOM')
+else
+	^temp == rmswe(^w,^z,^grid,^data,'BES')
+end if
+
+for ^i 1 10
+	for ^f 1 ^fnum
+		buf put b1 i^f j^i ^data(^i,^f)
+	end for
+end for 
+
+	
+if ^outstat
+    out y;
+end if
+
+! Copyright © 2004-2005 United States Government as represented by the Administrator of the 
+! National Aeronautics and Space Administration.  No copyright is claimed in the United States 
+! under Title 17, U.S. Code. All Other Rights Reserved.
+! 
+! Authors: Joseph M. Howard, Blair L. Unger, Mark E. Wilson, NASA
+! Revision Date: 2007.08.22     

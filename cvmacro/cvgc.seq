@@ -1,0 +1,49 @@
+!Purpose:	This macro gets global coordinate data.
+!
+! Input	
+!		
+!		Ref Surf
+!
+!
+! Output	The output data is stored in buffer 1. 
+!
+!Author:	Blair L. Unger - NASA Goddard		Date: 5-31-2006
+!
+!*********************************************************************
+
+RFD 1
+
+lcl num ^s ^ref ^ims
+
+^ref== #1
+
+if (out)
+    out n; !turn off all outputs
+    ^outstat == 1
+else
+    ^outstat == 0
+end if
+
+^ims == (num s)
+buf del b1
+
+for ^s 1 ^ims
+	buf put b1 i^s j1 (xsc s^s g^ref)
+	buf put b1 i^s j2 (ysc s^s g^ref)
+	buf put b1 i^s j3 (zsc s^s g^ref)
+	buf put b1 i^s j4 (asc s^s g^ref)
+	buf put b1 i^s j5 (bsc s^s g^ref)
+	buf put b1 i^s j6 (csc s^s g^ref)	
+end for 
+
+	
+if ^outstat
+    out y;
+end if
+
+! Copyright © 2004-2005 United States Government as represented by the Administrator of the 
+! National Aeronautics and Space Administration.  No copyright is claimed in the United States 
+! under Title 17, U.S. Code. All Other Rights Reserved.
+! 
+! Authors: Joseph M. Howard, Blair L. Unger, Mark E. Wilson, NASA
+! Revision Date: 2007.08.22     

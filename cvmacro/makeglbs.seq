@@ -1,0 +1,142 @@
+!****************************************************************************
+! Sequence:	MAKEGLBS
+!
+! Purpose:	Converts a range of surfaces to GLB decenter type with respect
+!		to a prior surface
+!
+! Syntax:	in MAKEGLBS first_surf_to_convert last_surf_to_convert global_ref_surf
+!
+! Inputs:	first_surf_to_convert	The number of the first surface (of a surface
+!						range) to convert to GLB.
+!						GUI Default = S2
+!						Command Default = none (print syntax message)
+!		last_surf_to_convert	The number of the last surface (of a surface
+!						range) to convert to GLB.
+!						GUI Default = first_surf_to_convert
+!						Command Default = none (print syntax message)
+!		global_ref_surface	Number of the global reference surface with
+!						respect to which the surfaces_to_convert
+!						are to be located;
+!						global_ref_surface < first_surface_to_convert
+!						GUI Default = surface 1
+!						Command Default = none (print syntax message)
+!						
+! Notes:	Macro to convert a range of surfaces to GLB (global decentered) type.
+!		Argument #1 = 1st surface to convert.  Can be a decentered surface.
+!		Argument #2 = Last surface to convert.  Can be a decentered surface.
+!		Argument #3 = Reference surface for global origin.  Must be < #1.
+!
+! Author:	J. Isenberg		Date: 5 Feb 2003
+!
+! History:	1998		JI	Written for personal use
+!		Sept. 1998	JI	Described as MAKEGLB (1 surface) in ORA NEWS Code V Tip
+!		5 Feb 2003	JI	Added macro dialog box & error checks.
+!		5 Mar 2003	JI	Added surface range capability, declared variables.
+!					Enhanced checks for surface numbers, disallowed
+!					some decenter types under certain conditions.
+!
+!****************************************************************************
+! ARG0 "Macro to convert range of surfaces to global decenter (GLB)"
+! ARG0 "without changing their locations or orientations"
+!
+! ARG1 NAME     "Beginning surface of range"
+! ARG1 TYPE     INT
+! ARG1 DEFAULT  2
+! ARG1 HELP     "1st surface to convert to global decenter type (default = surface 2)"
+!
+! ARG2 NAME     "Last surface of range"
+! ARG2 TYPE     INT
+! ARG2 DEFAULT  2
+! ARG2 HELP     "Last surface to convert to global decenter type (default = beginning surface)"
+!
+! ARG3 NAME     "Global reference surface"
+! ARG3 TYPE     INT
+! ARG3 DEFAULT  1
+! ARG3 HELP     "The converted surfaces will be GLB with respect to this surface (default = S1)"
+!
+!****************************************************************************
+ver all n
+LCL NUM ^s1 ^s2 ^g ^s ^x ^y ^z ^a ^b ^c
+LCL STR ^typdec ^tdp1
+rfd -1 -1 -1
+^s1 == #1
+^s2 == #2
+^g == #3
+if (num z) > 1
+	wri "WARNING:  This is a zoomed system."
+	wri "This macro may not convert the requested surfaces properly"
+	wri "to the GLB decenter type if there are zoomed thicknesses,"
+	wri "tilts, or decenters within the requested surface range."
+end if
+if ^g = -1
+	wri "No defaults in command mode."
+	wri "Syntax: IN MAKEGLBS s1 s2 g"
+	wri "			s1 = First surface of surface range to convert to GLB"
+	wri "			s2 = Last surface of surface range to convert to GLB"
+	wri "			g = GLB reference surface (global origin for s1..s2)"
+	wri
+	RTN
+end if
+if ^s2 = 2	! GUI default
+	^s2 == ^s1
+end if
+if ^s1 > ^s2
+	wri "Surface range must be entered in ascending order."
+	wri "Macro MAKEGLBS terminated."
+	RTN
+end if
+if ^g >= ^s1
+	wri "Cannot make a surface global with respect to a surface that follows it."
+	wri "Macro MAKEGLBS terminated."
+	RTN
+end if
+if ^g < 1
+	wri "Global reference surface must be S1 or greater."
+	wri "Cannot use object surface."
+	wri "Macro MAKEGLBS terminated."
+	RTN
+end if
+if ^s1<1.5
+	wri "First surface of surface range must be > 1."
+	wri "Macro MAKEGLBS terminated."
+	rtn
+end if
+if ^s2>(num s)-.5
+	wri "Image surface cannot be GLB."
+	wri "Workaround: Insert a dummy surface before the image."
+	wri "Macro MAKEGLB terminated."
+	rtn
+end if
+!
+wri q"Converting S'd'..'d' to GLB decenter type with respect to S'd'." ^s1 ^s2 ^g
+wri
+!
+!		Loop over surface range, in backwards order.
+!
+for ^s ^s2 ^s1 -1
+	^typdec == (typ dec s^s)
+	if ^typdec="DAR" or ^typdec="BEN" or ^typdec="REV"
+		^tdp1 == (typ dec s^s+1)
+		if ^tdp1<>"GLB" and ^tdp1<>"RET"
+			wri q"Next surface (S'd') must be GLB or RET" ^s+1
+			wri q"for GLB conversion of surface 'd' to work." ^s
+			wri q"Surface 'd' skipped." ^s
+		end if
+	end if
+	^x == (xsc s^s g^g)
+	^y == (ysc s^s g^g)
+	^z == (zsc s^s g^g)
+	^a == (asc s^s g^g)
+	^b == (bsc s^s g^g)
+	^c == (csc s^s g^g)
+	glb s^s g^g
+	xde s^s ^x
+	yde s^s ^y
+	zde s^s ^z
+	ade s^s ^a
+	bde s^s ^b
+	cde s^s ^c
+end for
+!	List converted surface data
+sur s^s1..^s2
+

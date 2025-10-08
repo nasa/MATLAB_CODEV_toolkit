@@ -1,0 +1,83 @@
+!Purpose:	This macro employs the RAYTRA command for computing opl data at the image surface
+!
+! Input	
+!		^grid	-number of grid lines in X or Y direction
+!       ^f		-field number
+!		^w		-wave number
+!       ^z		-zoom position
+!       ^chkap  -check aperture flag
+!
+! Output	The output data is stored in buffer 1. Any data outside aperture are 
+!		set to be -9999
+!
+!Author:	Joseph M. Howard - NASA Goddard		Date: 3-22-2006
+!
+!*********************************************************************
+
+RFD 32 1 1 1 1
+
+lcl num ^grid ^f ^s ^w ^z ^chkap ^i ^j ^k ^rayinput(4) ^rayoutput(8) 
+lcl num ^x0 ^y0 ^L0 ^M0 ^xywidth ^LMwidth ^xystep ^LMstep
+lcl num ^Lval ^Mval ^Nval ^dopl  ^outstat
+
+^grid== #1
+^f== #2
+^w== #3
+^z== #4
+^chkap==#5
+
+if (out)
+    out n; !turn off all outputs
+    ^outstat == 1
+else
+    ^outstat == 0
+end if
+
+buf del b1
+
+! Find the x y center and extremes on s1 using reference rays
+^x0 == (x f^f r1 w^w z^z s1)
+^y0 == (y f^f r1 w^w z^z s1)
+^L0 == (L f^f r1 w^w z^z s0) !L data is taken AFTER surface listed
+^M0 == (M f^f r1 w^w z^z s0)
+^xywidth == maxf(  (y f^f r2 w^w z^z s1)-(y f^f r3 w^w z^z s1) , (x f^f r4 w^w z^z s1)-(x f^f r4 w^w z^z s1) ) 
+^LMwidth == maxf(  (L f^f r4 w^w z^z s0)-(L f^f r5 w^w z^z s0) , (M f^f r2 w^w z^z s0)-(M f^f r3 w^w z^z s0) ) 
+^xystep == ^xywidth/(^grid-1)
+^LMstep == ^LMwidth/(^grid-1)
+
+for ^j 1 ^grid
+	^rayinput(2) == ^y0 - ^xywidth/2 + (^j-1)*^xystep
+    ^Lval == ^L0 - ^LMwidth/2 + (^j-1)*^LMstep
+	for ^i 1 ^grid
+        ^rayinput(1) == ^x0 - ^xywidth/2 + (^i-1)*^xystep
+        ^Mval == ^M0 - ^LMwidth/2 + (^i-1)*^LMstep
+        ^Nval == sqrtf( 1 - ^Lval*^Lval - ^Mval*^Mval )
+		^rayinput(3) == ^Lval / ^Nval
+		^rayinput(4) == ^Mval / ^Nval
+        
+            if (typ fld)="ANG" !CASE WHERE OBJECT AT INFINITY, REMOVES TILT FROM OFF-AXIS ANGLES
+                ^dopl == (^rayinput(1)*^rayinput(3)+^rayinput(2)*^rayinput(4))/sqrtf(1+^rayinput(3)**2+^rayinput(4)**2) 
+            else
+                ^dopl == 0
+            end if
+            
+            if RAYTRA(^z,^w,^chkap,^rayinput,^rayoutput) = 0 !ray passes
+                !RAYTRA function return:  0 for pass, >0 for surface which missed/TIR/diff
+                !                                     <0 for surface which blocked 
+                buf put b1 i^j j^i (^rayoutput(7)+^dopl) !opl
+            else
+                buf put b1 i^j j^i -9999 !ray failure
+            end if
+	end for
+end for
+	
+if ^outstat
+    out y;
+end if
+
+! Copyright © 2004-2005 United States Government as represented by the Administrator of the 
+! National Aeronautics and Space Administration.  No copyright is claimed in the United States 
+! under Title 17, U.S. Code. All Other Rights Reserved.
+! 
+! Authors: Joseph M. Howard, Blair L. Unger, Mark E. Wilson, NASA
+! Revision Date: 2007.08.22     

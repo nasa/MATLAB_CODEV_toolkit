@@ -1,0 +1,72 @@
+!Purpose:	This macro gets field, wavelength, or ... data.
+!
+! Input	
+!		^type:  choose field, wave, or ..., return from macro
+!			(default is field)
+!
+!
+!
+!
+! Output	The output data is stored in buffer 1. 
+!
+!Author:	Blair L. Unger - NASA Goddard		Date: 5-31-2006
+!
+!*********************************************************************
+
+RFD 1
+
+lcl num ^type ^i
+
+^type== #1
+
+if (out)
+    out n; !turn off all outputs
+    ^outstat == 1
+else
+    ^outstat == 0
+end if
+
+buf del b1
+
+
+if ^type = 1 ! Fields
+	if (typ fld)="ANG"
+		for ^i 1 (num f)
+			buf put b1 i^i j1 (XAN F^i)
+			buf put b1 i^i j2 (YAN F^i)
+		end for
+	else if (typ fld)="OBJ"
+		for ^i 1 (num f)
+			buf put b1 i^i j1 (XOB F^i)
+			buf put b1 i^i j2 (YOB F^i)
+		end for
+	else if (typ fld)="IMG"
+		for ^i 1 (num f)
+			buf put b1 i^i j1 (XIM F^i)
+			buf put b1 i^i j2 (YIM F^i)
+		end for
+	else if (typ fld)="RIH"
+		for ^i 1 (num f)
+			buf put b1 i^i j1 (XRI F^i)
+			buf put b1 i^i j2 (YRI F^i)
+		end for
+	end if
+
+else if ^type = 2 ! Wavelengths 
+	for ^i 1 (num w)
+		buf put b1 i^i j1 (WL W^i)
+		buf put b1 i^i j2 (WTW W^i)
+	end for
+
+end if
+	
+if ^outstat
+    out y;
+end if
+
+! Copyright © 2004-2005 United States Government as represented by the Administrator of the 
+! National Aeronautics and Space Administration.  No copyright is claimed in the United States 
+! under Title 17, U.S. Code. All Other Rights Reserved.
+! 
+! Authors: Joseph M. Howard, Blair L. Unger, Mark E. Wilson, NASA
+! Revision Date: 2007.08.22     

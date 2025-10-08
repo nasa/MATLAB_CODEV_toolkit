@@ -1,0 +1,201 @@
+!Purpose:	This macro gets reference ray data
+!
+! Input	^type
+!		^fnum
+!		^rnum
+!		^snum
+!		^wnum
+!		^znum
+!		^bget
+!		^bput
+!
+!
+! Output	The output data is stored in buffer 1. 
+!
+!Author:	Blair L. Unger - NASA Goddard		Date: 6-14-2006
+!
+!*********************************************************************
+
+RFD 1 1 1 1 1 8 1
+
+lcl num ^type ^f ^r ^s ^w ^z ^ff ^rr ^ss ^ww ^zz ^bget ^bput
+lcl num ^ims ^fnum ^rnum ^snum ^wnum ^znum ^ii ^temp ^data(4)
+
+^type == #1
+^fnum == #2
+^rnum == #3
+^snum == #4
+^wnum == #5
+^znum == #6
+^bget == #7
+^bput == #8
+
+if (out)
+    out n; !turn off all outputs
+    ^outstat == 1
+else
+    ^outstat == 0
+end if
+
+buf del b^bput
+
+^ims == (num s)
+^ii == 1
+
+if ^type = 1
+for ^ff 1 ^fnum
+	^f == (buf.num b^bget i^ff j1)
+	for ^rr 1 ^rnum
+		^r == (buf.num b^bget i^rr j2)
+		for ^ss 1 ^snum
+			^s == (buf.num b^bget i^ss j3)
+			for ^ww 1 ^wnum
+				^w == (buf.num b^bget i^ww j4)
+				for ^zz 1 ^znum
+					^z == (buf.num b^bget i^zz j5)
+buf put b^bput i^ii j1 (x f^f r^r s^s w^w z^z);
+buf put b^bput i^ii j2 (y f^f r^r s^s w^w z^z);
+buf put b^bput i^ii j3 (z f^f r^r s^s w^w z^z);
+buf put b^bput i^ii j4 (L f^f r^r s^s w^w z^z);
+buf put b^bput i^ii j5 (M f^f r^r s^s w^w z^z);
+buf put b^bput i^ii j6 (N f^f r^r s^s w^w z^z);
+buf put b^bput i^ii j7 (AOI f^f r^r s^s w^w z^z);
+buf put b^bput i^ii j8 (AOR f^f r^r s^s w^w z^z);
+buf put b^bput i^ii j9 (SRL f^f r^r s^s w^w z^z);
+buf put b^bput i^ii j10 (SRM f^f r^r s^s w^w z^z);
+buf put b^bput i^ii j11 (SRN f^f r^r s^s w^w z^z);
+buf put b^bput i^ii j12 (OP f^f r^r s1..^s w^w z^z);
+					^ii == ^ii + 1;
+				end for
+			end for
+		end for
+	end for
+end for
+end if
+
+
+
+if ^type = 2 ! Relative Field Only
+for ^ff 1 ^fnum
+	^data(3) == (buf.num b^bget i^ff j1)
+	^data(4) == (buf.num b^bget i^ff j2)
+	for ^rr 1 ^rnum
+		^r == (buf.num b^bget i^rr j3)
+		for ^ss 1 ^snum
+			^s == (buf.num b^bget i^ss j4)
+			for ^ww 1 ^wnum
+				^w == (buf.num b^bget i^ww j5)
+				for ^zz 1 ^znum
+					^z == (buf.num b^bget i^zz j6)
+		if ^r=1
+			^data(1)==0; ^data(2)==0;
+		else if ^r=2
+			^data(1)==0; ^data(2)==1;
+		else if ^r=3
+			^data(1)==0; ^data(2)==-1;
+		else if ^r=4
+			^data(1)==1; ^data(2)==0;
+		else if ^r=5
+			^data(1)==-1; ^data(2)==0;
+		end if
+	^temp==rayrsi(^z,^w,0,0,^data)
+buf put b^bput i^ii j1 (x s^s);
+buf put b^bput i^ii j2 (y s^s);
+buf put b^bput i^ii j3 (z s^s);
+buf put b^bput i^ii j4 (L s^s);
+buf put b^bput i^ii j5 (M s^s);
+buf put b^bput i^ii j6 (N s^s);
+buf put b^bput i^ii j7 (AOI s^s);
+buf put b^bput i^ii j8 (AOR s^s);
+buf put b^bput i^ii j9 (SRL s^s);
+buf put b^bput i^ii j10 (SRM s^s);
+buf put b^bput i^ii j11 (SRN s^s);
+buf put b^bput i^ii j12 (OP s1..^s);
+					^ii == ^ii + 1;
+				end for
+			end for
+		end for
+	end for
+end for
+end if
+
+
+
+if ^type = 3 ! Relative Pupil Only
+for ^ff 1 ^fnum
+	^f == (buf.num b^bget i^ff j1)
+	for ^rr 1 ^rnum
+		^data(1) == (buf.num b^bget i^rr j2)
+		^data(2) == (buf.num b^bget i^rr j3)
+		for ^ss 1 ^snum
+			^s == (buf.num b^bget i^ss j4)
+			for ^ww 1 ^wnum
+				^w == (buf.num b^bget i^ww j5)
+				for ^zz 1 ^znum
+					^z == (buf.num b^bget i^zz j6)
+		^temp==rayrsi(^z,^w,^f,0,^data)
+buf put b^bput i^ii j1 (x s^s);
+buf put b^bput i^ii j2 (y s^s);
+buf put b^bput i^ii j3 (z s^s);
+buf put b^bput i^ii j4 (L s^s);
+buf put b^bput i^ii j5 (M s^s);
+buf put b^bput i^ii j6 (N s^s);
+buf put b^bput i^ii j7 (AOI s^s);
+buf put b^bput i^ii j8 (AOR s^s);
+buf put b^bput i^ii j9 (SRL s^s);
+buf put b^bput i^ii j10 (SRM s^s);
+buf put b^bput i^ii j11 (SRN s^s);
+buf put b^bput i^ii j12 (OP s1..^s);
+					^ii == ^ii + 1;
+				end for
+			end for
+		end for
+	end for
+end for
+end if
+
+
+
+if ^type = 4 ! Relative field and pupil
+for ^ff 1 ^fnum
+	^data(3) == (buf.num b^bget i^ff j1)
+	^data(4) == (buf.num b^bget i^ff j2)
+	for ^rr 1 ^rnum
+		^data(1) == (buf.num b^bget i^rr j3)
+		^data(2) == (buf.num b^bget i^rr j4)
+		for ^ss 1 ^snum
+			^s == (buf.num b^bget i^ss j5)
+			for ^ww 1 ^wnum
+				^w == (buf.num b^bget i^ww j6)
+				for ^zz 1 ^znum
+					^z == (buf.num b^bget i^zz j7)
+		^temp==rayrsi(^z,^w,0,0,^data)
+buf put b^bput i^ii j1 (x s^s);
+buf put b^bput i^ii j2 (y s^s);
+buf put b^bput i^ii j3 (z s^s);
+buf put b^bput i^ii j4 (L s^s);
+buf put b^bput i^ii j5 (M s^s);
+buf put b^bput i^ii j6 (N s^s);
+buf put b^bput i^ii j7 (AOI s^s);
+buf put b^bput i^ii j8 (AOR s^s);
+buf put b^bput i^ii j9 (SRL s^s);
+buf put b^bput i^ii j10 (SRM s^s);
+buf put b^bput i^ii j11 (SRN s^s);
+buf put b^bput i^ii j12 (OP s1..^s);
+					^ii == ^ii + 1;
+				end for
+			end for
+		end for
+	end for
+end for
+end if
+if ^outstat
+    out y;
+end if
+
+! Copyright © 2004-2005 United States Government as represented by the Administrator of the 
+! National Aeronautics and Space Administration.  No copyright is claimed in the United States 
+! under Title 17, U.S. Code. All Other Rights Reserved.
+! 
+! Authors: Joseph M. Howard, Blair L. Unger, Mark E. Wilson, NASA
+! Revision Date: 2007.08.22     
