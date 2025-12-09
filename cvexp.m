@@ -22,7 +22,7 @@ ims2expdata = cvims2exp(f,w,z); %create dummy exit pupil
 if nargout<3,
     [opl,mask] = cvopl(nrd,f,w,z); %faster routine for opl data only
 else
-    [data,mask] = cvrgrid(nrd,f,cvims,w,z);
+    [data,mask] = cvrgrid(nrd,f,cvnum,w,z);
     opl = data(:,:,7);
     X = data(:,:,1); Y = data(:,:,2); Z = data(:,:,3);
     L = data(:,:,4); M = data(:,:,5); N = data(:,:,6);

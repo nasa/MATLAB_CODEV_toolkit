@@ -1,7 +1,5 @@
 function cvconfigfile
-
-% cvconfigfile
-% Easier / automatic way to configure the NASA MATLAB to CODE V Toolkit
+% cvconfigfile: Easier / automatic way to configure the NASA MATLAB to CODE V Toolkit
 % than having to remember to go back an edit a couple of files after you
 % upgrade CODE V
 %

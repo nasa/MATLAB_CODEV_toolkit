@@ -1,5 +1,5 @@
 function [CODEVpath,defaultspath,CODEVserver] = cvsetup(newconfigfile)
-% Returns location of CODE V installation and defaults.seq
+% Creates a config file, and returns location of CODE V installation and defaults.seq
 % function [CODEVpath,defaultspath,CODEVserver] = cvsetup(newsetup)
 %   INPUT:  newconfigfile = true, to setup a new config file, default = false (no)
 %                         = false, to load data from cvconfigfile.m
@@ -10,7 +10,7 @@ if nargin<1, newconfigfile = false; end
 if newconfigfile==-1 
     %USER defined software version and installation locations should be put here
     CODEVpath = 'C:\CODEV115';
-    defaultspath = 'Z:\0docs\CVUSER\defaults.seq';
+    defaultspath = 'C:\CVUSER\defaults.seq';
     CODEVserver = 'CODEV.Application.115';   
 elseif ~newconfigfile % use setup locations in configfile
     fname_config = [prefdir filesep 'cv.mat'];
@@ -28,8 +28,6 @@ end
 if nargout<1
     disp(['You are currently running CODE V version:  ' CODEVserver ]);
     disp('You are currently running CODE V toolkit:  2021a');
-%     verdata = ver;
-%     I_MATLAB = find(contains({verdata.Name},'MATLAB'))
     [~,matlab_date] = version;
     if datenum(matlab_date) < datenum('January 1, 2021')
         disp(['WARNING: CODE V toolkit requires MATLAB release >= 2021a']);

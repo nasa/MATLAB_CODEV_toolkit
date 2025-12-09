@@ -1,13 +1,17 @@
 function cmd = cvcv()
 % CVCV starts CODE V GUI version and loads file
 % function path = cvcv()
-% Note that CVUSER directory must be manually placed in this script.
 
 [filename,pathname] = uigetfile({'*.seq', 'SEQ Files (*.seq)';...
                                  '*.len', 'LEN Files (*.len)';...
                                  '*.*', 'All files (*.*)'},'Choose a .seq file to open'); 
+pathfilename = [pathname filesep filename];
 
-cmd = ['C:\CODEV970\codev /DEFAULT=c:\0docs\CVUSER\defaults "' filename '" &'];
+[CODEVpath,defaultspath] = cvsetup;
+
+cmd = [CODEVpath '\codev /DEFAULT="' defaultspath '" "' pathfilename '" &']; %loads defaults.seq file
+%cmd = [CODEVpath '\codev "' filename '" &']; %version with no defaults.seq file
+
 dos(cmd);
 
 

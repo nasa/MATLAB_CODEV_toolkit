@@ -1,20 +1,23 @@
-function [nums,numf,numw,numz] = cvnum()
+function [nums,numf,numw,numz,sto] = cvnum()
 %CVNUM  gets number of surfaces, field points, wavelengths, and zooms 
 %       defined for the current lens in CodeV
 %
-%   function [nums,numf,numw,numz] = cvnum()
+%   function [nums,numf,numw,numz,sto] = cvnum()
 % 
 %   See also CVLENSDATA 
 %
 
 global CodeV
-nums = invoke(CodeV,'GetSurfaceCount')-1; %want number of surfaces not including object
-numf = invoke(CodeV,'GetFieldCount');
-numw = invoke(CodeV,'GetWavelengthCount');
-numz = invoke(CodeV,'GetZoomCount');
+
+nums = CodeV.SurfaceCount-1; %want number of surfaces not including object
+numf = CodeV.FieldCount;
+numw = CodeV.WavelengthCount;
+numz = CodeV.ZoomCount;
+sto  = CodeV.StopSurface;
 
 if nargout<1
     disp(['Number of surfaces = ' int2str(nums)]);
+    disp(['Stop surface    = ' int2str(sto)]);
     disp(['Number of fields   = ' int2str(numf)]);
     disp(['Number of waves    = ' int2str(numw)]);
     disp(['Number of zooms    = ' int2str(numz)]);

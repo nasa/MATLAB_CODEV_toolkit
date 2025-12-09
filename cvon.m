@@ -51,7 +51,7 @@ cvcmd(['cd "' path '"']); %bug in version 2022.03
 if exist(defaultsfile, 'file')
     cvin(defaultsfile); %load defaults.seq file
 end
-cvcmd(['pth seq app "' fileparts(which('getf.seq')) '"']); %ensures local installation of CODE V can "see" the macro folder
+cvcmd(['pth seq app "' fileparts(which('cvfw.seq')) '"']); %ensures local installation of CODE V can "see" the macro folder
 
 cvsetup; %verifies that CODE V is running, prints results to command window
 

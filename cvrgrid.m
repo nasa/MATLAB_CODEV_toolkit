@@ -29,7 +29,9 @@ mask = data(:,:,1)==0; %CodeV returns 0 for ray pass
 data = data(:,:,[2:end 1]); %put raytra return data last
 
 if nargout<1
-    figs(data,mask);%,0,3,{'X','Y','Z','L','M','N','OPL','TRN','RAYTRA Flag'});
+    figure,
+    imagesc(data.*mask);
+    colorbar, axis tight, axis square,
 end
 
 % Copyright © 2004-2005 United States Government as represented by the Administrator of the 

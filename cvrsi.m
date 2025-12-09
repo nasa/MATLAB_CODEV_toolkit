@@ -21,14 +21,15 @@ function [X,Y,Z,L,M,N,AOI,AOR,LEN] = cvrsi(f,r,s,w,z,global_coord)
 
 if nargin<1, f = 1; end
 if nargin<2, r = 1; end
-if nargin<3, s = 1:cvims; end
+if nargin<3, s = 1:cvnum; end
 if nargin<4, w = 1; end
 if nargin<5, z = 1; end
 if nargin<6, global_coord = 0; end
 
-if global_coord == 0,
+if global_coord == 0
     glo_str = [' GLO N; '];
-else glo_str = [' GLO S' num2str(global_coord) ' ; '];
+else 
+    glo_str = [' GLO S' num2str(global_coord) ' ; '];
 end
 
 format = 'ROF ''E21.15'' X Y Z L M N AOI AOR LEN;';
@@ -61,7 +62,7 @@ end
 cvcmd('buf fnd b0 "IMG"'); %jump to IMG line in buffer
 iend  = str2num(cveva('(buf.i)',1)); 
 
-[success,output] = cvbufgetarray(istart:iend,2:10,0);
+[success,output] = cvbuf(0,istart:iend,2:10);
 
 X = output(:,1);   Y = output(:,2);   Z = output(:,3);
 L = output(:,4);   M = output(:,5);   N = output(:,6);

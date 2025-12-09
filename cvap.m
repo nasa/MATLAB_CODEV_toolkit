@@ -59,7 +59,7 @@ for ii=1:size(ap_data,1);
     ap_data(ii,2) = strrep(ap_data(ii,2),'S',''); 
 end
 
-for jj=1:cvims
+for jj=1:cvnum
     outnum = (find(str2num(char(ap_data(:,2)))==jj));
     for ii=1:size(outnum,1),
         lensdata.surf(jj).ap.raw(ii,1:6) = ap_data(outnum(ii),1:6); 
@@ -71,7 +71,7 @@ ap_shape = cellstr(['CIR';'REX';'REY';'ELX';'ELY';'ADX';'ADY';'ARO']);
 ap_type = cellstr([ 'EDG';'OBS';'HOL']);
 
 % **************** Typce classification for parsing **********************
-surfaces=1:cvims;
+surfaces=1:cvnum;
  for jj=surfaces
      outnum = (find(str2num(char(ap_data(:,2)))==jj));
      if isempty(outnum) == 0,

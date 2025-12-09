@@ -1,4 +1,4 @@
-% CODEV
+% MATLAB CODEV toolkit
 %
 % Files
 %   cvap       - gets the aperture data from the current lens
@@ -8,6 +8,7 @@
 %   cvbufput   - puts array data into the CodeV buffer
 %   cvcd       - changes current directory in matlab to CodeV toolkit directory
 %   cvcmd      - sends command to CODE V command line
+%   cvconfigfile - creates file for pointing to latest CODE V update installed
 %   cvcv       - starts CODE V GUI version and loads file
 %   cvdb       - queries CODE V database item
 %   cvdec      - returns decenter data from CodeV
@@ -45,6 +46,7 @@
 %   cvroot     - changes current working directory in MATLAB to CODE V toolkit directory
 %   cvrpol     - returns polarization ray trace data at image surface in CodeV
 %   cvrsi      - gets CODE V ray trace data from RSI command
+%   cvsetup    - creates a new config file, and returns location of CODE V installation and defaults.seq
 %   cvsave     - saves current lens file under pathfilename
 %   cvsd       - returns surface data in a cell array
 %   cvsen      - gets CODE V rigid body motion wavefront sensitivity data

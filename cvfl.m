@@ -25,7 +25,7 @@ if nargin<3, z=1; end
 if nargin<4, dx_da = 1e-6/cvunits; end%1 nr or nm motion
 
 fldtyp = cveva('(typ fld)',1); 
-if fldtyp == 'ANG', 
+if fldtyp == 'ANG' 
     df = dx_da*180/pi; 
 else 
     df = dx_da; 
@@ -38,17 +38,17 @@ fx0 = fx(f); fy0 = fy(f);
 
 input(3)=tand(fx0);
 input(4)=tand(fy0);
-input(1:2)=[-x,-y];
+input(1:2)=[-fx0,-fy0];
 [success,ray0]=invoke(CodeV,'RAYTRA',z,w,0,input',zeros(8,1));
 
 input(3)=tand(fx0+df);
 input(4)=tand(fy0);
-input(1:2)=[-x,-y];
+input(1:2)=[-fx0,-fy0];
 [success,rayX]=invoke(CodeV,'RAYTRA',z,w,0,input',zeros(8,1));
 
 input(3)=tand(fx0);
 input(4)=tand(fy0+df);
-input(1:2)=[-x,-y];
+input(1:2)=[-fx0,-fy0];
 [success,rayY]=invoke(CodeV,'RAYTRA',z,w,0,input',zeros(8,1));
 
 cvf(fx,fy); %reset field points

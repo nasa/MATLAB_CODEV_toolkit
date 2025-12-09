@@ -22,9 +22,10 @@ function [int,pha,gridspace,wl] = cvbpr(s,so,tgr,nrd_gri,pgr,f,z)
 %   See also CVPSF, CVPMA
 %
 
-ims = cvims;
-if nargin<1, s = ims-1:ims; end %default to final thickness
-if nargin<2, so = ims; end
+[nums,numf,numw,numz] = cvnum();
+
+if nargin<1, s = nums-1:nums; end %default to final thickness
+if nargin<2, so = nums; end
 if nargin<3, tgr = 128; end;
     tgr = pow2(nextpow2(tgr));  % CodeV only accepts powers of 2 for gridsizes
 if nargin<4, nrd_gri = tgr/2; end; % Nyquist sampling
@@ -33,7 +34,6 @@ if nargin<6, f=1; end
 if nargin<7, z=1; end
 
 %******* set field and zoom in CodeV
-[nums,numf,numw,numz] = cvnum();
 if numf>1, [fx,fy] = cvf(f); end
 if numz>1, cvz(z); end
 %*******
