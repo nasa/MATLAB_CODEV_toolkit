@@ -105,5 +105,6 @@ if ~exist(defaultspath,"file")
 end
 
 % Save cv.mat config file
+fname_config = [prefdir filesep 'cv.mat'];
 save(fname_config, 'CODEVserver', 'CODEVpath', 'defaultspath');
 
