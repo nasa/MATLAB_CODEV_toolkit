@@ -15,7 +15,7 @@ if newconfigfile==-1
 elseif ~newconfigfile % use setup locations in configfile
     fname_config = [prefdir filesep 'cv.mat'];
     if newconfigfile || ~exist(fname_config, 'file') %setup a new configfile if needed
-        cvconfigfile(1);
+        cvconfigfile;
     end
     load(fname_config,'CODEVpath','defaultspath','CODEVserver');
 else
@@ -49,13 +49,6 @@ function cvconfigfile
 % HISTORY:
 % 1/14/2019 David Aronstein, Initial release
 % 2023.06.12 Joe Howard, minor updates
-
-fname_config = [prefdir filesep 'cv.mat'];
-
-if exist(fname_config, 'file')
-    load(fname_config);
-end
-
 
 which_codev = questdlg('How should CODE V be configured?', 'CODE V Config', 'Use Most Recent', 'Select Version to Use', 'Use Most Recent');
 
