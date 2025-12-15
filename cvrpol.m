@@ -1,4 +1,4 @@
-function [raydata,rayfail] = cvrpol(s1raydata,w,z,apcheck)
+function raydata = cvrpol(s1raydata,w,z,apcheck)
 %CVRPOL returns polarization ray trace data at image surface in CodeV
 %
 %   function raydata = cvrpol(s1raydata,z,w,apcheck)
@@ -20,8 +20,8 @@ if nargin<2, w=1; end
 if nargin<3, z=1; end
 if nargin<4, apcheck=0; end
 
-raydata = zeros(34,1);
-[rayfail,raydata] = invoke(CodeV,'RAYPOL',z,w,apcheck,s1raydata,raydata);
+cvresults = CodeV.RAYPOL(z,w,apcheck,s1raydata);
+raydata = cell2mat(cvresults.Item('Output'));
 
 % Copyright © 2004-2005 United States Government as represented by the Administrator of the 
 % National Aeronautics and Space Administration.  No copyright is claimed in the United States 

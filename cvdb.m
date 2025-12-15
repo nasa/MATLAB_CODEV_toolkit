@@ -1,6 +1,6 @@
 function output = cvdb(query,output_type)
 %CVDB queries CODE V database item
-%     wraps "('cmd')" around the input, and executes cveva
+%     wraps input query with (), and executes cveva
 %
 %   function  output = cvdb(query,output_type)
 %

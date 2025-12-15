@@ -10,17 +10,17 @@ function title = cvtitle(z)
 %   See also CVSD, CVF, CVW, CVZ
 %
 
+if nargin<1, z = 1; end
+
 [nums,numf,numw,numz] = cvnum;
 
-for i=1:numz, title{i} = cveva(['(title z' int2str(i) ')'],1); end
+for i=1:numz
+    title{i,1} = cveva(['(title z' int2str(i) ')'],1); 
+end
 
 if nargout<1
-   output = ['z title'];
-   for i=1:numz
-       if length(title{i})<1, title{i} = ' '; end %ensures output given
-       output = strvcat(output,[int2str(i) ' ' title{i}]);
-   end
-   title = output;
+    title_table = table((1:numz)',title,'VariableNames',{'Zoom Position','Title'});
+   disp(title_table);
 end
 
 title = title{z};

@@ -1,0 +1,39 @@
+! Purpose:	This macro puts CODE V Buffer "TYP" data in target buffer
+!
+! Input: buffer # to query, default = 1
+!        buffer # to post result, default = 11
+!
+! Output: writes the following to result buffer:
+!         -1 = UNKNOWN type cell
+!          0 = NUM type cell
+!          1 = STR type cell
+!
+! Author:	Joseph M. Howard - NASA Goddard		Date: 24 Feb 2020
+
+ver n
+RFD 1 11
+
+lcl num ^i ^j ^bget ^bput
+lcl str ^btyp
+
+^bget == #1
+^bput == #2
+
+buf del b^bput
+
+for ^i 1 (BUF.LST B^bget)
+    for ^j 1 (BUF.MXJ B^bget)
+        ^btyp == (buf.typ b^bget i^i j^j)
+        if ^btyp = "UNKNOWN"
+        	buf put b^bput i^i j^j -1
+        else if ^btyp = "NUM"
+        	buf put b^bput i^i j^j  0
+        else if ^btyp = "STR"
+        	buf put b^bput i^i j^j  1
+        end if
+    end for
+end for
+
+
+! Authors: Joseph M. Howard, NASA
+! Revision Date: 2020.02.24   

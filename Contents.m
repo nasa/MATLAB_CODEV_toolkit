@@ -11,6 +11,7 @@
 %   cvconfigfile - creates file for pointing to latest CODE V update installed
 %   cvcv       - starts CODE V GUI version and loads file
 %   cvdb       - queries CODE V database item
+%   cvdir      - lists the directory of the toolkit
 %   cvdec      - returns decenter data from CodeV
 %   cvdraw     - draws the current lens in Matlab
 %   cvenc      - gets CODE V PSF based encircled energy for fieldpoint 1
@@ -54,6 +55,7 @@
 %   cvsl       - returns surface number and label in a string
 %   cvspot     - returns x,y spot diagram data
 %   cvstop     - stops a running CodeV command
+%   cvtest     - test script for the toolkit
 %   cvtitle    - queries titles in CODE V
 %   cvunits    - gets units of current lens in CodeV
 %   cvw        - queries and sets wavelengths and weights in CODE V

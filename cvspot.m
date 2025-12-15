@@ -50,10 +50,10 @@ for jj=1:length(w)
         if length(find(ry(:)~=0))==0, disp(['no data y ' num2str(ii)]);end
 
         %     rmsopd = norm(opd(mask)-mean(opd(mask)))./sqrt(length(find(mask)));
-
-        rms_spot_size(ii,jj) = sqrt(mean( (rx(rx~=0)-mean(rx(rx~=0))).^2 + (ry(ry~=0)-mean(ry(ry~=0))).^2 ));
-        size_x(ii,jj) = sqrt(mean( (rx(rx~=0)-mean(rx(rx~=0))).^2  ));
-        size_y(ii,jj) = sqrt(mean( (ry(ry~=0)-mean(ry(ry~=0))).^2 ));
+        mm = mask(:,:,ii,jj);
+        rms_spot_size(ii,jj) = sqrt( mean( hypot( rx(mm) - centx(ii,jj) , ry(mm)-centy(ii,jj) ).^2 ) ) ;
+        size_x(ii,jj) = sqrt(mean( (rx(mm)-mean(rx(mm))).^2  ));
+        size_y(ii,jj) = sqrt(mean( (ry(mm)-mean(ry(mm))).^2 ));
     end
 end
 
@@ -107,6 +107,8 @@ if nargout<1 %plot data if no output
         case 'four'
     end
     hold off
+    title(['RMS Spot Size: ' num2str(rms_spot_size)]);
+    raygridx = [];
 end
 
 if nargout==1

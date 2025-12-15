@@ -14,6 +14,7 @@ numf = CodeV.FieldCount;
 numw = CodeV.WavelengthCount;
 numz = CodeV.ZoomCount;
 sto  = CodeV.StopSurface;
+[~,dim]  = cvunits;
 
 if nargout<1
     disp(['Number of surfaces = ' int2str(nums)]);
@@ -21,6 +22,7 @@ if nargout<1
     disp(['Number of fields   = ' int2str(numf)]);
     disp(['Number of waves    = ' int2str(numw)]);
     disp(['Number of zooms    = ' int2str(numz)]);
+    disp(['Units = ' dim]);
 end
 
 % Copyright © 2004-2005 United States Government as represented by the Administrator of the 

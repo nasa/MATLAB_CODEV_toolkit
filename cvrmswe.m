@@ -34,19 +34,16 @@ rms_vals=zeros(10,numf+1);
 
 cvmacro('cvrmswe.seq',[nrd, w, z, mode]);
 
-field_lab = [num2cell(1:numf),{'Comp'}];
-out2(2:numf+2,1)=field_lab';
-if mode==1,
+field_label = [cellstr(int2str((1:numf)'));{'Comp'}];
+if mode==1
     output=cvbuf(1,1:numf+1,1:5);
-    labels = {'Field','RMS WFE','Focus','X-Shift','Y-Shift','Strehl'};
-    out2(1,1:6)=labels;
-    out2(2:numf+2,2:6)=num2cell(output);
+    labels = {'RMS WFE','Focus','X-Shift','Y-Shift','Strehl'};
+    rmswe_table = array2table(output,'VariableNames',labels,'RowNames',field_label);
 else
     output=cvbuf(1,1:numf+1,1:10);
     labels = {'Field','RMS WFE (Comp)','Focus (Comp)','X-Shift (Comp)','Y-Shift (Comp)','Strehl (Comp)',...
           'RMS WFE (Ind)','Focus (Ind)','X-Shift (Ind)','Y-Shift (Ind)','Strehl (Ind)'};
-      out2(1,1:11)=labels;
-    out2(2:numf+2,2:11)=num2cell(output);
+    rmswe_table = array2table(output,'VariableNames',labels,'RowNames',field_label);
 end
 
 rmsval = output(f,1);
@@ -55,7 +52,7 @@ yshift = output(f,4);
 strehl = output(f,5);
 
 if nargout<1
-    disp(out2);
+    disp(rmswe_table);
     if numf>1
         figure,
         plot([1,numf],[output(numf+1,1),output(numf+1,1)],'k');

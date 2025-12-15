@@ -115,7 +115,7 @@ if nargout<1
     rmsopd = norm(opd(mask)-mean(opd(mask)))./sqrt(length(find(mask))); %calculates the opd rms.
     opd(mask==0) = NaN;
     pvval = max(opd(mask))-min(opd(mask));
-    figure,
+    figure('color',[1 1 1]), 
     if max(opd(mask))-min(opd(mask))<1e-5,
         imagesc(flipdim(opd.*1e9,1))
         title(['Exit Pupil OPD Map (Units=nm), for f,w,z']);
@@ -129,7 +129,8 @@ if nargout<1
         title(['Exit Pupil OPD Map (Units=mm)']);
         xlabel(['RMS OPD = ' num2str(rmsopd*1e3) ' mm ' sprintf('\n') 'PV OPD = ' num2str(pvval*1e3) ' mm']);
     end
-    colorbar, axis tight, axis square,
+    colorbar, axis tight, axis square, colormap('jet')
+    alpha(1*mask);
     set(gca,'XTick',[]); set(gca,'YTick',[]); set(gca,'ZTick',[])
 end
 

@@ -22,7 +22,11 @@ if nargin<1, s=1:nums; end
 
 cvmacro('cvdec.seq');
 dec = cvbuf(1,1:nums+1,1:9);
-
+dec_type = cvbufstr(1,1:nums+1,10)
+dec_vars = {'XDE','YDE','ZDE','ADE','BDE','CDE','XOD','YOD','ZOD'};
+row_names = cellstr(cvsl(0:cvnum));
+dec_table = array2table(dec,'VariableNames',dec_vars,'RowNames',row_names);
+dec_table = addvars(dec_table,dec_type,'NewVariableNames','TYP')
 if nargout~=1 %get typ of surface decenter
    for i=1:nums+1
        typ{i} = cveva(['(buf.str b1 i' int2str(i) ' j10)'],1);
@@ -33,7 +37,7 @@ if nargin>0
     dec = dec(s+1,:); %return only surfaces desired
 end
 %**************************************************************************
-if nargin==2,
+if nargin==2
     [r,c] = size(setval);
     XDE = setval(:,1);
     if c<2, YDE = dec(:,2); else YDE = setval(:,2); end;
@@ -66,13 +70,8 @@ if nargin==2,
 end
 
 if nargout<1
-    for i=1:length(typ)
-        data{i,1} = typ{i};
-        for j=1:9
-            data{i,j+1} = dec(i,j);
-        end
-    end
-    dec = data
+    disp(dec_table)
+    dec = [];
 end
 
 % Copyright © 2004-2005 United States Government as represented by the Administrator of the 

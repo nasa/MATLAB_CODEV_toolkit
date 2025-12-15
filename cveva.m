@@ -14,18 +14,12 @@ function output = cveva(cmd,output_type)
 
 global CodeV
 
-if nargin < 2,
-    output_type = 0;
-end
+if nargin < 2, output_type = 0; end
 
-if output_type == 0, 
-    cvcmd(['buf put b1 i1 j1 ' cmd '; buf put b1 i1 j2 0.0;']); %put data into b1 i1 j1
-    data = cvbuf(1,1,1:2); %cvbuf only works in getting more than one buffer element 
-    output = data(1);
-
-elseif output_type == 1, 
-    output = invoke(CodeV,'EvaluateExpression',cmd);
+output = CodeV.EvaluateExpression(cmd);
     
+if output_type == 0
+    output = str2double(output);
 end
 
 % Copyright © 2004-2005 United States Government as represented by the Administrator of the 

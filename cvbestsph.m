@@ -16,9 +16,11 @@ if nargin<2, z=1; end
 if nargin<3, ymin=0.0; end
 if nargin<4, ymax=cvmap(s,z); end
 
-curv = invoke(CodeV,'BESTSPH',s,z,ymin,ymax);
-if curv<abs(eps), radius = 1e20;
-else radius = 1/curv;
+curv = CodeV.BESTSPH(s,z,ymin,ymax);
+if curv<abs(eps)
+    radius = 1e20;
+else 
+    radius = 1/curv;
 end
 
 % Copyright © 2004-2005 United States Government as represented by the Administrator of the 

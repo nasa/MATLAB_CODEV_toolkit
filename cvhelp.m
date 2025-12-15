@@ -1,6 +1,6 @@
 function cvhelp()
 % CVHELP displays tookit functions by subject
-help codev
+help MATLAB_CODEV_toolkit
 
 % Copyright © 2004-2005 United States Government as represented by the Administrator of the 
 % National Aeronautics and Space Administration.  No copyright is claimed in the United States 

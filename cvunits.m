@@ -11,7 +11,7 @@ function [units,unitstring] = cvunits()
 
 global CodeV
 
-dim = invoke(CodeV,'GetDimension'); % 2=mm, 1=cm, 0=inches
+dim = CodeV.Dimension; % 2=mm, 1=cm, 0=inches
 if dim==2, unitstring = 'mm'; units = 1.0;
 elseif dim==1, unitstring = 'cm'; units = 10.0;
 elseif dim==0, unitstring = 'inches'; units = 25.4;

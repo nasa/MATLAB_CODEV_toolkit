@@ -7,7 +7,7 @@ function cvstop()
 %
 
 global CodeV
-invoke(CodeV,'StopCommand');
+CodeV.StopCommand;
 
 % Copyright © 2004-2005 United States Government as represented by the Administrator of the 
 % National Aeronautics and Space Administration.  No copyright is claimed in the United States 

@@ -1,0 +1,92 @@
+!Purpose:	This macro puts surface data into buffer 1 and 2
+!
+! Input: none (all surfaces are queried)	
+!
+! Output to buffer 1 (numbers) and 2 (strings):
+!         rows: one row per surface, including object
+!         columns: rdy rdx thi map k, etc.
+!
+!Authors:	Joseph M. Howard - NASA Goddard		Date: 3-22-2006
+!
+
+lcl num ^i
+
+buf del b1..2
+
+for ^i 0 (num s)
+	buf put b1 i^i+1 j1 (rdy s^i)
+	buf put b1 i^i+1 j2 (rdx s^i)
+    if (typ sur s^i)<>"SPH"
+    	buf put b1 i^i+1 j3 (k s^i)
+    els
+    	buf put b1 i^i+1 j3 0
+    end if
+	buf put b1 i^i+1 j4 (thi s^i)
+	buf put b1 i^i+1 j5 (map s^i)
+	buf put b1 i^i+1 j6 (mav s^i)
+	buf put b1 i^i+1 j7 (mnr s^i)
+	buf put b1 i^i+1 j8 (prx s^i)
+	buf put b1 i^i+1 j9 (pry s^i)
+	buf put b1 i^i+1 j10 (dum s^i)
+	buf put b1 i^i+1 j11 (xde s^i)
+	buf put b1 i^i+1 j12 (yde s^i)
+	buf put b1 i^i+1 j13 (zde s^i)
+	buf put b1 i^i+1 j14 (ade s^i)
+	buf put b1 i^i+1 j15 (bde s^i)
+	buf put b1 i^i+1 j16 (cde s^i)
+	buf put b1 i^i+1 j17 (xod s^i)
+	buf put b1 i^i+1 j18 (yod s^i)
+	buf put b1 i^i+1 j19 (zod s^i)
+    buf put b1 i^i+1 j20 (glb s^i)
+    buf put b1 i^i+1 j21 (ret s^i)
+    buf put b1 i^i+1 j22 (nss ns1 s^i)
+    buf put b1 i^i+1 j23 (nss ns2 s^i)
+
+    !buf 2 for string data
+	buf put b2 i^i+1 j1 (typ sur s^i)
+	buf put b2 i^i+1 j2 (gla s^i)
+	buf put b2 i^i+1 j3 (rmd s^i)
+	buf put b2 i^i+1 j4 (sll s^i)
+	buf put b2 i^i+1 j5 (typ dec s^i)
+
+end for
+ 
+rtn
+
+! Copyright © 2004-2005 United States Government as represented by the Administrator of the 
+! National Aeronautics and Space Administration.  No copyright is claimed in the United States 
+! under Title 17, U.S. Code. All Other Rights Reserved.
+! 
+! Authors: Joseph M. Howard, Blair L. Unger, Mark E. Wilson, NASA
+! Revision Date: 2007.08.22    
+
+!archive code
+for ^i 0 (num s)
+	buf put b1 i^i+1 j1 (rdy s^i)
+	buf put b1 i^i+1 j2 (rdx s^i)
+	buf put b1 i^i+1 j3 (thi s^i)
+	buf put b1 i^i+1 j4 (map s^i)
+    if (typ sur s^i)<>"SPH"
+    	buf put b1 i^i+1 j5 (k s^i)
+    els
+    	buf put b1 i^i+1 j5 0
+    end if
+	buf put b1 i^i+1 j6 (typ sur s^i)
+	buf put b1 i^i+1 j7 (gla s^i)
+	buf put b1 i^i+1 j8 (rmd s^i)
+	buf put b1 i^i+1 j9 (sll s^i)
+	buf put b1 i^i+1 j10 (typ dec s^i)
+	buf put b1 i^i+1 j11 (xde s^i)
+	buf put b1 i^i+1 j12 (yde s^i)
+	buf put b1 i^i+1 j13 (zde s^i)
+	buf put b1 i^i+1 j14 (ade s^i)
+	buf put b1 i^i+1 j15 (bde s^i)
+	buf put b1 i^i+1 j16 (cde s^i)
+	buf put b1 i^i+1 j17 (xod s^i)
+	buf put b1 i^i+1 j18 (yod s^i)
+	buf put b1 i^i+1 j19 (zod s^i)
+	buf put b1 i^i+1 j20 (mav s^i)
+	buf put b1 i^i+1 j21 (dum s^i)
+
+end for
+ 

@@ -8,7 +8,8 @@ function cvoff
 
 global CodeV
 
-invoke(CodeV,'StopCodeV');
+CodeV.StopCodeV;
+
 evalin('base','clear CodeV');
 
 % Copyright © 2004-2005 United States Government as represented by the Administrator of the 

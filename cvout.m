@@ -10,7 +10,7 @@ function output = cvout()
 
 global CodeV
 
-output = invoke(CodeV,'GetCommandOutput');
+output = CodeV.CommandOutput;
 
 % Copyright © 2004-2005 United States Government as represented by the Administrator of the 
 % National Aeronautics and Space Administration.  No copyright is claimed in the United States 

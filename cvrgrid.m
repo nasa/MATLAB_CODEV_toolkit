@@ -30,8 +30,10 @@ data = data(:,:,[2:end 1]); %put raytra return data last
 
 if nargout<1
     figure,
-    imagesc(data.*mask);
-    colorbar, axis tight, axis square,
+    imagesc(data(:,:,7).*mask);
+    colorbar, axis tight, axis square
+    title('OPL')
+    data = [];
 end
 
 % Copyright © 2004-2005 United States Government as represented by the Administrator of the 
