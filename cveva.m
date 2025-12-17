@@ -1,15 +1,11 @@
 function output = cveva(cmd,output_type)
-%CVEVA sends command to CODE V command line over existing COM link
-%       Output is number converted from string return from CodeV command line
-%       NOTE: max precision of output is limited due to string conversion,
-%             if float precision is required, use CVEVAF function
-%
+%CVEVA evaluates the input command in CODE V using "EVA"
 %   function output = cveva(cmd,output_type)
 %
-%   cmd = CODE V command line script to be executed in single quotes: 'x'
-%   output_type: 0=number (default), 1=string
+%   INPUT:  cmd, CODE V command line script to be executed in single quotes: 'x'
+%           output_type: 0=number (default), 1=string
 % 
-%   See also CVCMD, CVDB, CVSD, CVEVA
+%   See also CVCMD, CVDB
 %
 
 global CodeV

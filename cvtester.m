@@ -1,16 +1,17 @@
-% test script for MATLAB_CODEV_toolkit
+% cvtester.m is a script to test the MATLAB_CODEV_toolkit
 
 help 'MATLAB_CODEV_toolkit'
 
 [CODEVpath,defaultspath,CODEVserver] = cvsetup()
-CVtoolkitPath = fileparts(which('cvon.m'))
+cvcv       % starts GUI session of CODE V from Matlab
 
+CVtoolkitPath = fileparts(which('cvon.m'))
 cd(CVtoolkitPath)
 dir
 
-cvoff      % kills any running COM links
+%start background session of CODE V
+cvoff      % kills any running CODE V COM links
 cvon       % starts the COM link between Matlab and CODE V
-cvcv       % starts GUI session of CODE V from Matlab
 
 % Load sample lens
 cvcmd('res cv_lens:dbgauss')
@@ -38,12 +39,9 @@ cvlicense
 cvpath                  
 cvreadme                
 cvroot                  
-cvsetup                 
-cvdb('thi s0')                    
 cvout                   
 cvdir                   
 cvsave('test.seq')                  
-cveva('2*4')                  
 cvstop                  
 
 % System data 
