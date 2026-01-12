@@ -1,21 +1,19 @@
-!Purpose:	This macro gets field, wavelength, or ... data.
+!Purpose:	puts field, wavelength or zoom data into Buffer 1
 !
-! Input	
-!		^type:  choose field, wave, or ..., return from macro
-!			(default is field)
-!
-!
-!
-!
-! Output	The output data is stored in buffer 1. 
+!Input:     ^type:  1 = field (default), 2 = wavelengths, 3 = zoom titles
+!   
+!Output:	Output data is stored in buffer 1. 
 !
 !Author:	Blair L. Unger - NASA Goddard		Date: 5-31-2006
+!           2009.12.18   JMH added zoom loop
+!           2010.03.16   JMH added X and Y image data
+!           2010.03.16   JMH added field number output
 !
 !*********************************************************************
 
 RFD 1
 
-lcl num ^type ^i
+lcl num ^type ^i ^j
 
 ^type== #1
 
@@ -28,35 +26,94 @@ end if
 
 buf del b1
 
-
 if ^type = 1 ! Fields
 	if (typ fld)="ANG"
 		for ^i 1 (num f)
-			buf put b1 i^i j1 (XAN F^i)
-			buf put b1 i^i j2 (YAN F^i)
+            for ^j 1 (num z)
+                ^row == ^i+(num f)*(^j-1)
+                buf put b1 i^row j1 (XAN F^i Z^j)
+                buf put b1 i^row j2 (YAN F^i Z^j)
+                buf put b1 i^row j3 (WTF F^i Z^j)
+                buf put b1 i^row j4 (VUY F^i Z^j)
+                buf put b1 i^row j5 (VLY F^i Z^j)
+                buf put b1 i^row j6 (VUX F^i Z^j)
+                buf put b1 i^row j7 (VLX F^i Z^j)
+                buf put b1 i^row j8 ^j  !zoom position for field data
+                buf put b1 i^row j9 (x r1 si F^i Z^j)  ! X chief ray coord at image
+                buf put b1 i^row j10 (y r1 si F^i Z^j) ! Y chief ray coord at image
+                buf put b1 i^row j11 ^i  !field number
+            end for
 		end for
 	else if (typ fld)="OBJ"
 		for ^i 1 (num f)
-			buf put b1 i^i j1 (XOB F^i)
-			buf put b1 i^i j2 (YOB F^i)
+            for ^j 1 (num z)
+                ^row == ^i+(num f)*(^j-1)
+                buf put b1 i^row j1 (XOB F^i Z^j)
+                buf put b1 i^row j2 (YOB F^i Z^j)
+                buf put b1 i^row j3 (WTF F^i Z^j)
+                buf put b1 i^row j4 (VUY F^i Z^j)
+                buf put b1 i^row j5 (VLY F^i Z^j)
+                buf put b1 i^row j6 (VUX F^i Z^j)
+                buf put b1 i^row j7 (VLX F^i Z^j)
+                buf put b1 i^row j8 ^j  !zoom position for field data
+                buf put b1 i^row j9 (x r1 si F^i Z^j)  ! X chief ray coord at image
+                buf put b1 i^row j10 (y r1 si F^i Z^j) ! Y chief ray coord at image
+                buf put b1 i^row j11 ^i  !field number
+           end for
 		end for
 	else if (typ fld)="IMG"
 		for ^i 1 (num f)
-			buf put b1 i^i j1 (XIM F^i)
-			buf put b1 i^i j2 (YIM F^i)
+            for ^j 1 (num z)
+                ^row == ^i+(num f)*(^j-1)
+                buf put b1 i^row j1 (XIM F^i Z^j)
+                buf put b1 i^row j2 (YIM F^i Z^j)
+                buf put b1 i^row j3 (WTF F^i Z^j)
+                buf put b1 i^row j4 (VUY F^i Z^j)
+                buf put b1 i^row j5 (VLY F^i Z^j)
+                buf put b1 i^row j6 (VUX F^i Z^j)
+                buf put b1 i^row j7 (VLX F^i Z^j)
+                buf put b1 i^row j8 ^j  !zoom position for field data
+                buf put b1 i^row j9 (x r1 si F^i Z^j)  ! X chief ray coord at image
+                buf put b1 i^row j10 (y r1 si F^i Z^j) ! Y chief ray coord at image
+                buf put b1 i^row j11 ^i  !field number
+            end for
 		end for
 	else if (typ fld)="RIH"
 		for ^i 1 (num f)
-			buf put b1 i^i j1 (XRI F^i)
-			buf put b1 i^i j2 (YRI F^i)
+            for ^j 1 (num z)
+                ^row == ^i+(num f)*(^j-1)
+                buf put b1 i^row j1 (XRI F^i Z^j)
+                buf put b1 i^row j2 (YRI F^i Z^j)
+                buf put b1 i^row j3 (WTF F^i Z^j)
+                buf put b1 i^row j4 (VUY F^i Z^j)
+                buf put b1 i^row j5 (VLY F^i Z^j)
+                buf put b1 i^row j6 (VUX F^i Z^j)
+                buf put b1 i^row j7 (VLX F^i Z^j)
+                buf put b1 i^row j8 ^j  !zoom position for field data
+                buf put b1 i^row j9 (x r1 si F^i Z^j)  ! X chief ray coord at image
+                buf put b1 i^row j10 (y r1 si F^i Z^j) ! Y chief ray coord at image
+                buf put b1 i^row j11 ^i  !field number
+            end for
 		end for
 	end if
 
 else if ^type = 2 ! Wavelengths 
 	for ^i 1 (num w)
-		buf put b1 i^i j1 (WL W^i)
-		buf put b1 i^i j2 (WTW W^i)
+        buf put b1 i^i j1 (WL W^i)  !WL data in first column
+        for ^j 2 (num z)+1          !WTW data in remaining columns
+            buf put b1 i^i j^j (WTW W^i Z^j-1)
+        end for
 	end for
+    for ^j 2 (num z)+1  !Put REF data in final row        
+        buf put b1 i^i j^j (REF Z^j-1)
+    end for
+
+else if ^type = 3 ! Zooms
+    for ^i 1 (num z)
+        buf put b1 i^i j1 ^i
+        buf put b1 i^i j2 (pos z^i)
+        buf put b1 i^i j3 (tit z^i)
+    end for
 
 end if
 	
@@ -64,7 +121,7 @@ if ^outstat
     out y;
 end if
 
-! Copyright © 2004-2005 United States Government as represented by the Administrator of the 
+! Copyright Â© 2004-2005 United States Government as represented by the Administrator of the 
 ! National Aeronautics and Space Administration.  No copyright is claimed in the United States 
 ! under Title 17, U.S. Code. All Other Rights Reserved.
 ! 

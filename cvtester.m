@@ -42,6 +42,8 @@ cvroot
 cvout                   
 cvdir                   
 cvsave('test.seq')                  
+dir test*
+delete 'test.seq'
 cvstop                  
 
 % System data 
@@ -60,7 +62,6 @@ cvunits
 cvview                  
 cvbestsph             
 cvenc                   
-cvmap                   
 cvopl                   
 cvpin                   
 cvpma                   

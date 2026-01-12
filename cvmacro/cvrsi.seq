@@ -1,43 +1,131 @@
-!Purpose:	This macro gets ray data from buffer 0 when calling RSI
+!Purpose:	This macro gets RSI ray trace data
 !
-! Output:	The output data is stored in buffer 1. 
+! Input	^fnum
+!		^rnum
+!		^snum
+!		^wnum
+!		^znum
+!       ^gnum
+!       ^op_s1
+!       ^op_s2
 !
-!Author:	Joseph M. Howard - NASA Goddard		Date: 6-1-2007
+!		^bget == BUFFER 8, Ray definition data
+!		^bput == BUFFER 1
+!
+! Output	The output data is stored in buffer 1. 
+!               
+!Author:	Joseph M. Howard - NASA Goddard		Date: 2019.04.01
 !
 !*********************************************************************
+!ver all y
+RFD 1 1 1 1 1 -1 1 0
 
-lcl num ^i ^start ^end !^s((num s))
+lcl num ^type ^fx ^fy ^rx ^ry ^s ^w ^z ^g ^ff ^rr ^ss ^ww ^zz ^ii
+lcl num ^bget ^bput ^op_s1 ^op_s2 ^novalue
+lcl num ^fnum ^rnum ^snum ^wnum ^znum ^gnum ^s_ref
 
-buf mov b0 i1 j1;
-buf fnd " X "
-^start==(buf.i)+1; 
-buf fnd "buf n";
-^end==(buf.i)-1;
-wri ^start ^end
+^fnum == #1
+^rnum == #2
+^snum == #3
+^wnum == #4
+^znum == #5
+^gnum == #6
+^op_s1 == #7
+^op_s2 == #8
 
-! Parse data
-! Assumed format: ROF ''E21.15'' X Y Z L M N AOI AOR LEN;
-buf prs i^start..^end "'4c' 'c' '21.15e' '21.15e''21.15e''21.15e''21.15e''21.15e''21.15e''21.15e''21.15e'"; 
+^bget == 8  !Gets ray data from BUFFER 8
+^bput == 1  !Puts ray data into BUFFER 1
+^novalue == -999  !flag to use field numbers and ray numbers
 
-! Move to buffer 1, and covert STO OBJ IMG and surface data to numbers
-buf del b1; 
-buf mov b1;
-buf cop b0 i^start..^end
-buf fnd "OBJ";
-if (buf.fnd)
-    buf put 0.0
+if (out)
+    out n !turn off all outputs
+    ^outstat == 1
+else
+    ^outstat == 0
 end if
-buf fnd "STO"; 
-if (buf.fnd)
-    buf put (sto)
-end if
-buf fnd "IMG"; 
-if (buf.fnd)
-    buf put (num s)
-end if
-for ^i ^start ^end
-    buf put b1 i^i j2 str_to_num((buf.str b1 i^i j1));
+
+if ^op_s2 < ^op_s1  !set op_s2 to image surface
+    ^op_s2 == (num s)
+end if 
+
+buf del b^bput
+
+^ii == 1        !Buffer row counter
+
+for ^ff 1 ^fnum
+	^fx == (buf.num b^bget i^ff j1)
+	^fy == (buf.num b^bget i^ff j2)
+	for ^rr 1 ^rnum
+		^rx == (buf.num b^bget i^rr j3)
+		^ry == (buf.num b^bget i^rr j4)
+		^s_ref == (buf.num b^bget i^rr j8)
+		for ^ss 1 ^snum
+			^s == (buf.num b^bget i^ss j5)
+			for ^ww 1 ^wnum
+				^w == (buf.num b^bget i^ww j6)
+				for ^zz 1 ^znum
+					^z == (buf.num b^bget i^zz j7)
+
+                    if ^gnum<0  
+                        ^g == ^s  !get LOCAL COORDINATE DATA
+                    else
+                        ^g == ^gnum  !get GLOBAL COORDINATE DATA
+                    end if
+
+                      !CODE V SYNTAX HELP
+                      !RSI     [Sk|Si..j] [Zk] [Wn] x_fract_pupil  y_fract_pupil  x_fract_max_x_field  y_fract_max_y_field
+                      !      Single trace, relative pupil coordinates, relative field
+                      !RSI     [Sk|Si..j] [Zk] [Wn] Fm  x_fract_pupil  y_fract_pupil
+                      !      Single trace, numbered field, relative pupil coordinates
+                      !RSI     [Sk|Si..j] [Zk] [Wn]  Fm  Rs
+                      !      Single trace, numbered field, numbered reference ray
+                      !RSI     [Sk|Si..j] [Zk] [Wn] x_ref_surf y_ref_surf x_fract_max_x_field y_fract_max_y_field num_of_ref_surf
+                      !      Single trace, actual reference surface coordinates and
+                      !      relative field; num_of_ref_surf defines temporary
+                      !      reference surface for trace
+                      !RSI     [Sk|Si..j] [Zk] [Wn] Fm x_ref_surf y_ref_surf num_of_ref_surf
+                      !      Single trace, numbered field, actual reference surface
+                      !      coordinates; num_of_ref_surf defines temporary reference surface for trace
+                      !RSI     [Sk|Si..j]
+                      !      Trace ray defined by last RSI command
+
+                    if ^fy = ^novalue AND ^ry = ^novalue
+                        rsi s^s z^z w^w f^fx r^rx; !buf put b2 i^ii j1 1;
+                    else if ^fy = ^novalue AND ^ry <> ^novalue AND ^s_ref<0
+                        rsi s^s z^z w^w f^fx ^rx ^ry; !buf put b2 i^ii j1 2;
+                    else if ^fy <> ^novalue AND ^ry <> ^novalue AND ^s_ref<0
+                        rsi s^s z^z w^w ^rx ^ry ^fx ^fy; !buf put b2 i^ii j1 3;
+                    else if ^fy = ^novalue AND ^ry <> ^novalue
+                        rsi s^s z^z w^w f^fx ^rx ^ry ^s_ref; !buf put b2 i^ii j1 4;
+                    else if ^fy <> ^novalue AND ^ry <> ^novalue
+                        rsi s^s z^z w^w ^rx ^ry ^fx ^fy ^s_ref; !buf put b2 i^ii j1 5;
+                    end if
+    
+                    buf put b^bput i^ii j1 (x s^s g^g);
+                    buf put b^bput i^ii j2 (y s^s g^g);
+                    buf put b^bput i^ii j3 (z s^s g^g);
+                    buf put b^bput i^ii j4 (L s^s g^g);
+                    buf put b^bput i^ii j5 (M s^s g^g);
+                    buf put b^bput i^ii j6 (N s^s g^g);
+                    buf put b^bput i^ii j7 (AOI s^s g^g);
+                    buf put b^bput i^ii j8 (AOR s^s g^g);
+                    buf put b^bput i^ii j9 (SRL s^s g^g);
+                    buf put b^bput i^ii j10 (SRM s^s g^g);
+                    buf put b^bput i^ii j11 (SRN s^s g^g);
+                    buf put b^bput i^ii j12 (OP s^op_s1..^op_s2);
+                    buf put b^bput i^ii j13 (BLS); !blocked surface
+                    buf put b^bput i^ii j14 (RER); !ray error
+
+					^ii == ^ii + 1;  !buf put b2 i1 j1 ^ii
+				end for
+			end for
+		end for
+	end for
 end for
+
+if ^outstat
+    out y;
+end if
 
 ! Copyright © 2004-2005 United States Government as represented by the Administrator of the 
 ! National Aeronautics and Space Administration.  No copyright is claimed in the United States 
